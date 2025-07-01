@@ -9,8 +9,6 @@ from deepagent.mcp.discovery import MCPDiscovery
 from deepagent.mcp.client import MCPClient
 from deepagent.mcp.auth import get_auth_token
 
-MEMORY_FILE = os.environ.get("DEEPAGENT_MEMORY", os.path.join(os.path.dirname(__file__), 'mcp', 'memory.json'))
-
 print("DeepAgent main.py loaded")
 sys.stdout.flush()
 
@@ -22,18 +20,23 @@ class DeepAgent:
         self.mcp_clients = {}
         self.mcp_capabilities_cache = self._load_memory()
 
+    def _get_memory_file(self):
+        return os.environ.get("DEEPAGENT_MEMORY", os.path.join(os.path.dirname(__file__), 'mcp', 'memory.json'))
+
     def _load_memory(self):
-        if os.path.exists(MEMORY_FILE):
-            with open(MEMORY_FILE, 'r') as f:
+        memory_file_path = self._get_memory_file()
+        if os.path.exists(memory_file_path):
+            with open(memory_file_path, 'r') as f:
                 try:
                     return json.load(f)
                 except json.JSONDecodeError:
-                    print(f"Warning: {MEMORY_FILE} is corrupted. Starting with empty memory.")
+                    print(f"Warning: {memory_file_path} is corrupted. Starting with empty memory.")
                     return {}
         return {}
 
     def _save_memory(self):
-        with open(MEMORY_FILE, 'w') as f:
+        memory_file_path = self._get_memory_file()
+        with open(memory_file_path, 'w') as f:
             json.dump(self.mcp_capabilities_cache, f, indent=2)
 
     def _get_mcp_client(self, base_url: str):

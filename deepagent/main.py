@@ -50,7 +50,7 @@ class DeepAgent:
             if not self.mcp_capabilities_cache:
                 print("No MCP servers discovered or no capabilities found. Cannot perform task.")
                 sys.stdout.flush()
-                return
+                return None # Return None if no servers found
 
         # Simple task parsing: assume task_description is a command for now
         command_to_execute = task_description.split()[0] # e.g., "translate" from "translate 'hello'"
@@ -70,7 +70,7 @@ class DeepAgent:
         if not found_server:
             print(f"No MCP server found that can handle command: '{command_to_execute}'")
             sys.stdout.flush()
-            return
+            return None # Return None if no suitable server found
 
         client = self._get_mcp_client(server_url)
         auth_token = None
@@ -82,7 +82,7 @@ class DeepAgent:
             if not auth_token:
                 print("Authentication failed or token not provided. Cannot execute command.")
                 sys.stdout.flush()
-                return
+                return None # Return None if authentication fails
 
         print(f"Executing command '{task_description}' on {found_server}...")
         sys.stdout.flush()
@@ -93,9 +93,11 @@ class DeepAgent:
             sys.stdout.flush()
             print(json.dumps(result, indent=2))
             sys.stdout.flush()
+            return result # <--- ADDED THIS RETURN STATEMENT
         else:
             print("Task execution failed.")
             sys.stdout.flush()
+            return None # Return None on execution failure
 
 if __name__ == "__main__":
     agent = DeepAgent()

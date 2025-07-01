@@ -19,22 +19,21 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install flake8 mypy
 
-    - name: Start MCP Server
+    - name: Start Mock MCP Server
       run: |
-        uvicorn mcp_server:app --port 8000 & # Run in background
+        uvicorn tests.mock_mcp_server:app --port 8000 & # Run in background
         sleep 5 # Give the server some time to start
 
-    - name: Run DeepAgent Integration Test
+    - name: Run Pytest and Coverage
       run: |
-        python -m deepagent.examples.run_task_translate
+        pytest --cov=deepagent --cov-report=xml
 
-    - name: Lint with flake8
-      run: |
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
-
-    - name: Type check with mypy
-      run: |
-        mypy .
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true

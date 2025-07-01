@@ -57,6 +57,48 @@ A simple approach is implemented:
 *   **Auth Prompt:** Prompts the user for authorization on `401` errors.
 *   **Reporting:** Reports on successful/failed execution.
 
+## How to Run the Project
+
+To run the DeepAgent project locally, follow these steps:
+
+### Prerequisites
+
+*   Python 3.8+
+*   `pip` (Python package installer)
+
+### Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/justrunme/deepagent.git
+    cd deepagent
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### Running the MCP Server
+
+Open a new terminal and start the mock MCP server. This server will provide the capabilities that DeepAgent discovers and interacts with.
+
+```bash
+uvicorn mcp_server:app --reload --port 8000
+```
+
+Leave this terminal open and running the server.
+
+### Running the DeepAgent
+
+Open another terminal, navigate to the project root directory (`deepagent/`), and run the DeepAgent example:
+
+```bash
+python3 deepagent/examples/run_task_translate.py
+```
+
+You should see output in your terminal as DeepAgent discovers the MCP server, requests capabilities, and executes commands.
+
 ## Testing
 
 Comprehensive testing is implemented using `pytest` and `pytest-cov` for code coverage:

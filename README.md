@@ -1,5 +1,7 @@
 # DeepAgent: Autonomous Agents and Tool Discovery with MCP
 
+[![DeepAgent CI](https://github.com/justrunme/deepagent/actions/workflows/test.yml/badge.svg)](https://github.com/justrunme/deepagent/actions/workflows/test.yml)
+
 This project demonstrates how an autonomous agent (DeepAgent) can discover, connect to, and utilize Machine-Centric Protocol (MCP) servers to execute tasks. It focuses on authorization, memory, and dynamic action based on discovered capabilities.
 
 ## Concept: DeepAgent + MCP Discovery & Authorization
@@ -49,7 +51,7 @@ A simple approach is implemented:
 
 ### DeepAgent Features:
 
-*   **Memory:** Remembers MCP server capabilities.
+*   **Persistent Memory:** DeepAgent now remembers discovered MCP server capabilities and stores them in `memory.json` for future use.
 *   **Re-selection:** Automatically re-selects suitable servers.
 *   **Caching:** Caches successful calls.
 *   **Auth Prompt:** Prompts the user for authorization on `401` errors.
@@ -57,8 +59,10 @@ A simple approach is implemented:
 
 ## Testing
 
+Comprehensive testing is implemented using `pytest` and `pytest-cov` for code coverage:
 *   **Unit Tests:** For discovery, authentication, and execution logic.
-*   **Integration Tests:** Running a mock MCP server and testing end-to-end tasks.
+*   **Integration Tests:** Running a mock MCP server (`tests/mock_mcp_server.py`) and testing end-to-end tasks.
+*   **Code Coverage:** Measures test coverage and reports it to Codecov.
 *   **Negative Cases:** Handling unauthorized access, unknown commands, timeouts.
 
 ## Future Ideas:

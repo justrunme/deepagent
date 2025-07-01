@@ -28,6 +28,7 @@ jobs:
 
     - name: Run Pytest and Coverage
       run: |
+        export PYTHONPATH=$PWD
         pytest --cov=deepagent --cov-report=xml
 
     - name: Upload coverage to Codecov

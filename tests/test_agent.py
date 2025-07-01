@@ -21,13 +21,13 @@ def test_translate_command():
 
 TEST_MEMORY_FILE = "deepagent/mcp/test_memory.json"
 
-def test_persistent_memory():
+def test_persistent_memory(monkeypatch):
     # Ensure the test memory file is clean before starting
     if os.path.exists(TEST_MEMORY_FILE):
         os.remove(TEST_MEMORY_FILE)
 
-    # Set the environment variable for this test
-    os.environ["DEEPAGENT_MEMORY"] = TEST_MEMORY_FILE
+    # Set the environment variable for this test using monkeypatch
+    monkeypatch.setenv("DEEPAGENT_MEMORY", TEST_MEMORY_FILE)
 
     # First run: discover and save capabilities
     agent1 = DeepAgent()
@@ -47,4 +47,4 @@ def test_persistent_memory():
 
     # Clean up the test memory file
     os.remove(TEST_MEMORY_FILE)
-    del os.environ["DEEPAGENT_MEMORY"]
+    # monkeypatch.delenv("DEEPAGENT_MEMORY") # monkeypatch automatically cleans up env vars

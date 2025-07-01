@@ -8,7 +8,11 @@ class Task(BaseModel):
 
 @app.get("/capabilities")
 def get_capabilities():
-    return {"commands": ["echo", "translate"], "requires_auth": False}
+    return {
+        "name": "mock-mcp",
+        "commands": ["echo", "translate"],
+        "requires_auth": False
+    }
 
 @app.post("/execute")
 def execute_task(task: Task, request: Request):

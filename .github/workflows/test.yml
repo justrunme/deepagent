@@ -26,9 +26,14 @@ jobs:
         uvicorn tests.mock_mcp_server:app --port 8000 & # Run in background
         sleep 5 # Give the server some time to start
 
+    - name: Clear memory.json before tests
+      run: |
+        echo "{}" > deepagent/mcp/memory.json
+
     - name: Run Pytest and Coverage
       run: |
         export PYTHONPATH=$PWD
+        export DEEPAGENT_MEMORY=deepagent/mcp/memory.json
         pytest --cov=deepagent --cov-report=xml
 
     - name: Upload coverage to Codecov

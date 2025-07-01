@@ -9,7 +9,7 @@ from deepagent.mcp.discovery import MCPDiscovery
 from deepagent.mcp.client import MCPClient
 from deepagent.mcp.auth import get_auth_token
 
-MEMORY_FILE = os.path.join(os.path.dirname(__file__), 'mcp', 'memory.json')
+MEMORY_FILE = os.environ.get("DEEPAGENT_MEMORY", os.path.join(os.path.dirname(__file__), 'mcp', 'memory.json'))
 
 print("DeepAgent main.py loaded")
 sys.stdout.flush()

@@ -1,5 +1,6 @@
 import json
 import sys
+import os
 
 print("DEBUG: Starting deepagent/main.py execution.")
 sys.stdout.flush()
@@ -7,6 +8,8 @@ sys.stdout.flush()
 from deepagent.mcp.discovery import MCPDiscovery
 from deepagent.mcp.client import MCPClient
 from deepagent.mcp.auth import get_auth_token
+
+MEMORY_FILE = os.path.join(os.path.dirname(__file__), 'mcp', 'memory.json')
 
 print("DeepAgent main.py loaded")
 sys.stdout.flush()
@@ -17,7 +20,21 @@ class DeepAgent:
         sys.stdout.flush()
         self.discovery = MCPDiscovery()
         self.mcp_clients = {}
-        self.mcp_capabilities_cache = {}
+        self.mcp_capabilities_cache = self._load_memory()
+
+    def _load_memory(self):
+        if os.path.exists(MEMORY_FILE):
+            with open(MEMORY_FILE, 'r') as f:
+                try:
+                    return json.load(f)
+                except json.JSONDecodeError:
+                    print(f"Warning: {MEMORY_FILE} is corrupted. Starting with empty memory.")
+                    return {}
+        return {}
+
+    def _save_memory(self):
+        with open(MEMORY_FILE, 'w') as f:
+            json.dump(self.mcp_capabilities_cache, f, indent=2)
 
     def _get_mcp_client(self, base_url: str):
         if base_url not in self.mcp_clients:
@@ -40,6 +57,7 @@ class DeepAgent:
             else:
                 print(f"Failed to get capabilities from {url}")
                 sys.stdout.flush()
+        self._save_memory() # Save after discovery
 
     def run_task(self, task_description: str):
         print(f"\nDeepAgent received task: '{task_description}'")
